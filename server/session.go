@@ -142,6 +142,8 @@ func (s *MCPServer) SendNotificationToClient(
 	params map[string]any,
 ) error {
 	session := ClientSessionFromContext(ctx)
+	fmt.Printf("SendNotificationToClient session:%+v\n", session)
+	fmt.Printf("SendNotificationToClient 12NotificationChannel:%+v\n", session.NotificationChannel())
 	if session == nil || !session.Initialized() {
 		return ErrNotificationNotInitialized
 	}
@@ -158,6 +160,7 @@ func (s *MCPServer) SendNotificationToClient(
 
 	select {
 	case session.NotificationChannel() <- notification:
+		fmt.Printf("SendNotificationToClient NotificationChannel end\n")
 		return nil
 	default:
 		// Channel is blocked, if there's an error hook, use it
